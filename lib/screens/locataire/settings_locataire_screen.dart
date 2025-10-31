@@ -21,17 +21,6 @@ class SettingsLocataireScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildSettingButton(
-                icon: Icons.person,
-                label: 'Modifier le profil',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => ModifierProfilLocataireScreen()),
-                  );
-                },
-
-              ),
               SizedBox(height: 16),
               _buildSettingButton(
                 icon: Icons.lock,

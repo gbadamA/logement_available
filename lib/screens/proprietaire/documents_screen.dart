@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:file_picker/file_picker.dart';
 
 class DocumentsScreen extends StatelessWidget {
   const DocumentsScreen({super.key});
@@ -34,9 +35,10 @@ class DocumentsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: Text('Mes documents', style: textTheme.titleLarge),
+        automaticallyImplyLeading: false,
+        title: Text('', style: textTheme.titleLarge),
         centerTitle: true,
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.white,
         elevation: 4,
       ),
       body: ListView.builder(
@@ -88,13 +90,29 @@ class DocumentsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(title, style: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w600)),
+                      Text(
+                        title,
+                        style: GoogleFonts.manrope(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       const SizedBox(height: 4),
-                      Text(subtitle, style: GoogleFonts.manrope(fontSize: 14, color: Colors.grey.shade600)),
+                      Text(
+                        subtitle,
+                        style: GoogleFonts.manrope(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
                     ],
                   ),
                 ),
-                const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.grey,
+                ),
               ],
             ),
           ),

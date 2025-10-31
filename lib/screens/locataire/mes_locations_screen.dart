@@ -44,7 +44,10 @@ class MesLocationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mes locations'),
+        title: Text(
+          'Mes locations',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
         backgroundColor: Colors.indigo,
         centerTitle: true,
       ),
@@ -55,7 +58,9 @@ class MesLocationsScreen extends StatelessWidget {
           final loc = locations[index];
           return Card(
             margin: const EdgeInsets.only(bottom: 16),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             elevation: 3,
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -65,17 +70,26 @@ class MesLocationsScreen extends StatelessWidget {
                   // 🏠 Nom du bien
                   Text(
                     loc['bien'],
-                    style: GoogleFonts.manrope(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.manrope(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
 
                   // 📍 Type et adresse
-                  Text('${loc['type']} • ${loc['adresse']}', style: GoogleFonts.manrope(fontSize: 14)),
+                  Text(
+                    '${loc['type']} • ${loc['adresse']}',
+                    style: GoogleFonts.manrope(fontSize: 14),
+                  ),
 
                   const SizedBox(height: 8),
 
                   // 📅 Dates
-                  Text('Du ${loc['dateDebut']} au ${loc['dateFin']}', style: GoogleFonts.manrope(fontSize: 14)),
+                  Text(
+                    'Du ${loc['dateDebut']} au ${loc['dateFin']}',
+                    style: GoogleFonts.manrope(fontSize: 14),
+                  ),
 
                   const SizedBox(height: 12),
 
@@ -84,9 +98,14 @@ class MesLocationsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
-                          color: _getStatutColor(loc['statut']).withOpacity(0.1),
+                          color: _getStatutColor(
+                            loc['statut'],
+                          ).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
@@ -121,8 +140,14 @@ class MesLocationsScreen extends StatelessWidget {
                       label: const Text('Faire une demande'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.indigo,
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                        textStyle: GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w600),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
+                        textStyle: GoogleFonts.manrope(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),

@@ -10,8 +10,9 @@ class StatistiquesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Statistiques', style: textTheme.titleLarge),
-        backgroundColor: Colors.indigo,
+        automaticallyImplyLeading: false,
+        title: Text('', style: textTheme.titleLarge),
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
@@ -20,8 +21,10 @@ class StatistiquesScreen extends StatelessWidget {
           children: [
             Text('Vue d’ensemble 📊', style: textTheme.headlineLarge),
             const SizedBox(height: 16),
-            Text('Suivez les performances de vos biens et revenus locatifs.',
-                style: textTheme.bodyLarge),
+            Text(
+              'Suivez les performances de vos biens et revenus locatifs.',
+              style: textTheme.bodyLarge,
+            ),
             const SizedBox(height: 32),
             _buildStatCard('Biens loués', '12'),
             _buildStatCard('Revenus mensuels', '1 200 000 FCFA'),
@@ -44,8 +47,20 @@ class StatistiquesScreen extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w600)),
-          Text(value, style: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w700)),
+          Text(
+            label,
+            style: GoogleFonts.manrope(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Text(
+            value,
+            style: GoogleFonts.manrope(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
         ],
       ),
     );

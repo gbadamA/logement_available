@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gestionbien/screens/proprietaire/settings_screen.dart';
-import 'package:gestionbien/themes/text_theme.dart';
 import 'package:lottie/lottie.dart';
 import 'config/app_routes.dart';
 import 'core/widgets/custom_drawer.dart';
@@ -11,6 +10,7 @@ import 'screens/proprietaire/signalements_proprietaire_screen.dart';
 import 'screens/proprietaire/messagerie_proprietaire_screen.dart';
 import 'screens/proprietaire/documents_screen.dart';
 import 'screens/proprietaire/statistiques_screen.dart';
+import 'package:gestionbien/themes/app_theme.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,17 +20,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'ImmoConnect',
-      theme: ThemeData(
-        textTheme: AppTextTheme.light,
-        primarySwatch: Colors.indigo,
-        scaffoldBackgroundColor: Colors.grey.shade100,
-      ),
-      darkTheme: ThemeData(
-        textTheme: AppTextTheme.dark,
-        primarySwatch: Colors.indigo,
-        scaffoldBackgroundColor: Colors.grey.shade900,
-      ),
-      themeMode: ThemeMode.system, // auto switch
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.light, // auto switch
       initialRoute: '/',
       routes: AppRoutes.routes,
     );
@@ -90,7 +82,7 @@ class _HomePageState extends State<HomePage> {
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Colors.transparent),
+              decoration: BoxDecoration(color: Colors.green),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -101,11 +93,11 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 10),
                   Text(
                     'Bienvenue Propriétaire',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    style: TextStyle(color: Colors.black87, fontSize: 18),
                   ),
                   Text(
                     'contact@immoconnect.ci',
-                    style: TextStyle(color: Colors.white70),
+                    style: TextStyle(color: Colors.black87, fontSize: 14),
                   ),
                 ],
               ),

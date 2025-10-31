@@ -10,8 +10,9 @@ class SettingsProprietaireScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Paramètres propriétaire', style: textTheme.titleLarge),
-        backgroundColor: Colors.indigo,
+        automaticallyImplyLeading: false,
+        title: Text('', style: textTheme.titleLarge),
+        backgroundColor: Colors.white,
       ),
       body: Center(
         child: Padding(
@@ -25,9 +26,14 @@ class SettingsProprietaireScreen extends StatelessWidget {
                 Navigator.pushNamed(context, '/modifier_profil');
               }),
 
-              _buildSettingButton(context, Icons.lock, 'Changer mot de passe', () {
-                // À connecter à ton écran de sécurité
-              }),
+              _buildSettingButton(
+                context,
+                Icons.lock,
+                'Changer mot de passe',
+                () {
+                  // À connecter à ton écran de sécurité
+                },
+              ),
               _buildSettingButton(context, Icons.language, 'Langue', () {
                 // À connecter à ton sélecteur de langue
               }),
@@ -41,7 +47,12 @@ class SettingsProprietaireScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingButton(BuildContext context, IconData icon, String label, VoidCallback onTap) {
+  Widget _buildSettingButton(
+    BuildContext context,
+    IconData icon,
+    String label,
+    VoidCallback onTap,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
@@ -52,7 +63,13 @@ class SettingsProprietaireScreen extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -63,10 +80,17 @@ class SettingsProprietaireScreen extends StatelessWidget {
                 Expanded(
                   child: Text(
                     label,
-                    style: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: GoogleFonts.manrope(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
-                const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: Colors.grey,
+                ),
               ],
             ),
           ),

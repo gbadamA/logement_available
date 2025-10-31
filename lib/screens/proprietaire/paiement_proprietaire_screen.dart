@@ -6,10 +6,12 @@ class PaiementProprietaireScreen extends StatefulWidget {
   const PaiementProprietaireScreen({super.key});
 
   @override
-  State<PaiementProprietaireScreen> createState() => _PaiementProprietaireScreenState();
+  State<PaiementProprietaireScreen> createState() =>
+      _PaiementProprietaireScreenState();
 }
 
-class _PaiementProprietaireScreenState extends State<PaiementProprietaireScreen> {
+class _PaiementProprietaireScreenState
+    extends State<PaiementProprietaireScreen> {
   List<Map<String, dynamic>> paiements = [
     {
       'locataire': 'Koffi Jean',
@@ -63,9 +65,10 @@ class _PaiementProprietaireScreenState extends State<PaiementProprietaireScreen>
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: Text('Paiements reçus', style: textTheme.titleLarge),
+        automaticallyImplyLeading: false,
+        title: Text('', style: textTheme.titleLarge),
         centerTitle: true,
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.white,
         elevation: 4,
       ),
       body: ListView.builder(
@@ -124,23 +127,51 @@ class _PaiementProprietaireScreenState extends State<PaiementProprietaireScreen>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(locataire, style: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w700)),
+                        Text(
+                          locataire,
+                          style: GoogleFonts.manrope(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                         const SizedBox(height: 4),
-                        Text('Montant : $montant', style: GoogleFonts.manrope(fontSize: 14)),
-                        Text('Date : $date', style: GoogleFonts.manrope(fontSize: 14, color: Colors.grey.shade600)),
-                        Text('Moyen : $moyen', style: GoogleFonts.manrope(fontSize: 14, color: Colors.grey.shade600)),
+                        Text(
+                          'Montant : $montant',
+                          style: GoogleFonts.manrope(fontSize: 14),
+                        ),
+                        Text(
+                          'Date : $date',
+                          style: GoogleFonts.manrope(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                        Text(
+                          'Moyen : $moyen',
+                          style: GoogleFonts.manrope(
+                            fontSize: 14,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
                       ],
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: statutColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       statut,
-                      style: GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w600, color: statutColor),
+                      style: GoogleFonts.manrope(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: statutColor,
+                      ),
                     ),
                   ),
                 ],
@@ -163,7 +194,11 @@ class _PaiementProprietaireScreenState extends State<PaiementProprietaireScreen>
                 const SizedBox(height: 8),
                 Text(
                   '✅ Paiement effectué',
-                  style: GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.green),
+                  style: GoogleFonts.manrope(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.green,
+                  ),
                 ),
               ],
 
@@ -178,15 +213,25 @@ class _PaiementProprietaireScreenState extends State<PaiementProprietaireScreen>
                     });
 
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Paiement validé et marqué comme effectué ✅')),
+                      SnackBar(
+                        content: Text(
+                          'Paiement validé et marqué comme effectué ✅',
+                        ),
+                      ),
                     );
                   },
                   icon: const Icon(Icons.check_circle),
                   label: const Text('Valider le paiement'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                    textStyle: GoogleFonts.manrope(fontSize: 14, fontWeight: FontWeight.w600),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 12,
+                    ),
+                    textStyle: GoogleFonts.manrope(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],

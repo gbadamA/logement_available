@@ -34,9 +34,10 @@ class MessagerieProprietaireScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: Text('Messagerie propriétaire', style: textTheme.titleLarge),
+        automaticallyImplyLeading: false,
+        title: Text('', style: textTheme.titleLarge),
         centerTitle: true,
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.white,
         elevation: 4,
       ),
       body: ListView.builder(
@@ -54,12 +55,12 @@ class MessagerieProprietaireScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ChatProprietaireScreen(destinataire: convo['nom']),
+                  builder: (context) =>
+                      ChatProprietaireScreen(destinataire: convo['nom']),
                 ),
               );
             },
           );
-
         },
       ),
     );
@@ -99,13 +100,33 @@ class MessagerieProprietaireScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(nom, style: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w700)),
+                      Text(
+                        nom,
+                        style: GoogleFonts.manrope(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       const SizedBox(height: 4),
-                      Text(message, style: GoogleFonts.manrope(fontSize: 14, color: Colors.grey.shade600), maxLines: 1, overflow: TextOverflow.ellipsis),
+                      Text(
+                        message,
+                        style: GoogleFonts.manrope(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
                   ),
                 ),
-                Text(date, style: GoogleFonts.manrope(fontSize: 12, color: Colors.grey.shade500)),
+                Text(
+                  date,
+                  style: GoogleFonts.manrope(
+                    fontSize: 12,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
               ],
             ),
           ),

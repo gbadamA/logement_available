@@ -6,6 +6,8 @@ class SignalementsProprietaireScreen extends StatelessWidget {
 
   final List<Map<String, dynamic>> signalements = const [
     {
+      'locataire': 'Jean Kouassi',
+      'logement': 'Appartement B2',
       'type': 'Fuite d’eau',
       'description': 'Fuite sous l’évier de la cuisine.',
       'date': '21 oct. 2025',
@@ -13,6 +15,8 @@ class SignalementsProprietaireScreen extends StatelessWidget {
       'icone': Icons.water_drop,
     },
     {
+      'locataire': 'Aminata Touré',
+      'logement': 'Studio A1',
       'type': 'Panne électrique',
       'description': 'Plus de lumière dans le salon.',
       'date': '18 oct. 2025',
@@ -20,6 +24,8 @@ class SignalementsProprietaireScreen extends StatelessWidget {
       'icone': Icons.electrical_services,
     },
     {
+      'locataire': 'Moussa Diabaté',
+      'logement': 'Appartement C3',
       'type': 'Nuisance sonore',
       'description': 'Bruits excessifs la nuit.',
       'date': '15 oct. 2025',
@@ -44,12 +50,13 @@ class SignalementsProprietaireScreen extends StatelessWidget {
     final textTheme = Theme.of(context).textTheme;
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
-        title: Text('Signalements reçus', style: textTheme.titleLarge),
+        automaticallyImplyLeading: false,
+        title: Text('', style: textTheme.titleLarge),
         centerTitle: true,
-        backgroundColor: Colors.indigo,
         elevation: 4,
+        backgroundColor: Colors.white,
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(24),
@@ -57,6 +64,8 @@ class SignalementsProprietaireScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final sig = signalements[index];
           return _buildSignalementCard(
+            locataire: sig['locataire'],
+            logement: sig['logement'],
             icon: sig['icone'],
             type: sig['type'],
             description: sig['description'],
@@ -70,6 +79,8 @@ class SignalementsProprietaireScreen extends StatelessWidget {
   }
 
   Widget _buildSignalementCard({
+    required String locataire,
+    required String logement,
     required IconData icon,
     required String type,
     required String description,
@@ -87,38 +98,86 @@ class SignalementsProprietaireScreen extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Row(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, size: 28, color: Colors.indigo),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(type, style: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 4),
-                    Text(description, style: GoogleFonts.manrope(fontSize: 14, color: Colors.grey.shade700)),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Text(
+                'Locataire : $locataire',
+                style: GoogleFonts.manrope(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                'Logement : $logement',
+                style: GoogleFonts.manrope(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey.shade700,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Icon(icon, size: 28, color: Colors.orange),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(date, style: GoogleFonts.manrope(fontSize: 12, color: Colors.grey.shade500)),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          decoration: BoxDecoration(
-                            color: statutColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12),
+                        Text(
+                          type,
+                          style: GoogleFonts.manrope(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
                           ),
-                          child: Text(
-                            statut,
-                            style: GoogleFonts.manrope(fontSize: 12, fontWeight: FontWeight.w600, color: statutColor),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          description,
+                          style: GoogleFonts.manrope(
+                            fontSize: 14,
+                            color: Colors.grey.shade700,
                           ),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              date,
+                              style: GoogleFonts.manrope(
+                                fontSize: 12,
+                                color: Colors.grey.shade500,
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: statutColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                statut,
+                                style: GoogleFonts.manrope(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: statutColor,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -14,7 +14,10 @@ class _ChatProprietaireScreenState extends State<ChatProprietaireScreen> {
   final TextEditingController _messageController = TextEditingController();
 
   final List<Map<String, dynamic>> messages = [
-    {'from': 'proprietaire', 'text': 'Bonjour ${DateTime.now().year}, reçu la quittance ?'},
+    {
+      'from': 'proprietaire',
+      'text': 'Bonjour ${DateTime.now().year}, reçu la quittance ?',
+    },
     {'from': 'locataire', 'text': 'Oui merci, tout est en ordre.'},
   ];
 
@@ -35,8 +38,12 @@ class _ChatProprietaireScreenState extends State<ChatProprietaireScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: Text('Discussion avec ${widget.destinataire}', style: textTheme.titleLarge),
-        backgroundColor: Colors.indigo,
+        automaticallyImplyLeading: false,
+        title: Text(
+          'Discussion avec ${widget.destinataire}',
+          style: textTheme.titleLarge,
+        ),
+        backgroundColor: Colors.white,
         centerTitle: true,
       ),
       body: Column(
@@ -49,14 +56,21 @@ class _ChatProprietaireScreenState extends State<ChatProprietaireScreen> {
                 final msg = messages[index];
                 final isMe = msg['from'] == 'proprietaire';
                 return Align(
-                  alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                  alignment: isMe
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
                   child: Container(
                     margin: const EdgeInsets.symmetric(vertical: 6),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     decoration: BoxDecoration(
                       color: isMe ? Colors.indigo.shade100 : Colors.white,
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
+                      boxShadow: [
+                        BoxShadow(color: Colors.black12, blurRadius: 4),
+                      ],
                     ),
                     child: Text(
                       msg['text'],
@@ -78,7 +92,9 @@ class _ChatProprietaireScreenState extends State<ChatProprietaireScreen> {
                     controller: _messageController,
                     decoration: InputDecoration(
                       hintText: 'Écrire un message...',
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     style: GoogleFonts.manrope(),
                   ),

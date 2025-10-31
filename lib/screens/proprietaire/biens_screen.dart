@@ -44,8 +44,9 @@ class MesBiensScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mes biens'),
-        backgroundColor: Colors.indigo,
+        automaticallyImplyLeading: false,
+        title: const Text(''),
+        backgroundColor: Colors.white,
         centerTitle: true,
       ),
       body: ListView.builder(
@@ -55,7 +56,9 @@ class MesBiensScreen extends StatelessWidget {
           final bien = biens[index];
           return Card(
             margin: const EdgeInsets.only(bottom: 16),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
             elevation: 3,
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -65,18 +68,27 @@ class MesBiensScreen extends StatelessWidget {
                   // 🏠 Nom du bien
                   Text(
                     bien['nom'],
-                    style: GoogleFonts.manrope(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: GoogleFonts.manrope(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 8),
 
                   // 📍 Type et adresse
-                  Text('${bien['type']} • ${bien['adresse']}', style: GoogleFonts.manrope(fontSize: 14)),
+                  Text(
+                    '${bien['type']} • ${bien['adresse']}',
+                    style: GoogleFonts.manrope(fontSize: 14),
+                  ),
 
                   const SizedBox(height: 8),
 
                   // 👤 Locataire (si occupé)
                   if (bien['locataire'] != null)
-                    Text('Locataire : ${bien['locataire']}', style: GoogleFonts.manrope(fontSize: 14)),
+                    Text(
+                      'Locataire : ${bien['locataire']}',
+                      style: GoogleFonts.manrope(fontSize: 14),
+                    ),
 
                   const SizedBox(height: 12),
 
@@ -85,9 +97,14 @@ class MesBiensScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
-                          color: _getStatutColor(bien['statut']).withOpacity(0.1),
+                          color: _getStatutColor(
+                            bien['statut'],
+                          ).withOpacity(0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(

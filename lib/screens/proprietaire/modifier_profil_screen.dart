@@ -25,8 +25,9 @@ class _ModifierProfilScreenState extends State<ModifierProfilScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Modifier le profil', style: textTheme.titleLarge),
-        backgroundColor: Colors.indigo,
+        automaticallyImplyLeading: false,
+        title: Text('', style: textTheme.titleLarge),
+        backgroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -37,7 +38,9 @@ class _ModifierProfilScreenState extends State<ModifierProfilScreen> {
               // 📸 Avatar
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('assets/images/avatar.png'), // à remplacer
+                backgroundImage: AssetImage(
+                  'assets/images/avatar.png',
+                ), // à remplacer
               ),
               TextButton(
                 onPressed: () {
@@ -88,7 +91,9 @@ class _ModifierProfilScreenState extends State<ModifierProfilScreen> {
                 onChanged: (val) => setState(() => _langue = val!),
                 decoration: InputDecoration(
                   labelText: 'Langue préférée',
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
 
@@ -98,7 +103,10 @@ class _ModifierProfilScreenState extends State<ModifierProfilScreen> {
               SwitchListTile(
                 value: _notifications,
                 onChanged: (val) => setState(() => _notifications = val),
-                title: Text('Notifications activées', style: GoogleFonts.manrope(fontSize: 16)),
+                title: Text(
+                  'Notifications activées',
+                  style: GoogleFonts.manrope(fontSize: 16),
+                ),
                 activeColor: Colors.indigo,
               ),
 
@@ -118,8 +126,14 @@ class _ModifierProfilScreenState extends State<ModifierProfilScreen> {
                 label: const Text('Enregistrer'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.indigo,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                  textStyle: GoogleFonts.manrope(fontSize: 16, fontWeight: FontWeight.w600),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 14,
+                  ),
+                  textStyle: GoogleFonts.manrope(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ],

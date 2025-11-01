@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class RevenusMensuelsDetailsScreen extends StatelessWidget {
   final String mois;
@@ -37,6 +38,10 @@ class RevenusMensuelsDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final total = paiements.fold<int>(0, (sum, p) => sum + p['montant'] as int);
+    final encaisse = paiements
+        .where((p) => p['statut'] == 'Payé')
+        .fold<int>(0, (s, p) => s + p['montant'] as int);
+    final enAttente = total - encaisse;
 
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
@@ -86,6 +91,47 @@ class RevenusMensuelsDetailsScreen extends StatelessWidget {
 
           const SizedBox(height: 24),
 
+          // 🔹 Graphique camembert
+          Text(
+            "Répartition Payé / En attente",
+            style: GoogleFonts.manrope(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 250,
+            child: PieChart(
+              PieChartData(
+                sections: [
+                  PieChartSectionData(
+                    value: encaisse.toDouble(),
+                    color: Colors.green,
+                    title: "${((encaisse / total) * 100).toStringAsFixed(1)}%",
+                    radius: 80,
+                    titleStyle: GoogleFonts.manrope(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  PieChartSectionData(
+                    value: enAttente.toDouble(),
+                    color: Colors.redAccent,
+                    title: "${((enAttente / total) * 100).toStringAsFixed(1)}%",
+                    radius: 80,
+                    titleStyle: GoogleFonts.manrope(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
           // 🔹 Liste des paiements
           Text(
             "Paiements des locataires",
@@ -95,7 +141,6 @@ class RevenusMensuelsDetailsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
-
           ...paiements.map((p) => _buildPaiementCard(p)).toList(),
         ],
       ),

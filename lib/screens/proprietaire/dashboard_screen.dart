@@ -68,21 +68,22 @@ class ProprietaireDashboardScreen extends StatelessWidget {
               ),
 
               _CardData(
-                Icons.money_off,
-                'Charges & dépenses',
-                '/proprietaire/depenses',
-                Colors.orange.shade100,
+                Icons.receipt_long,
+                'Charges & Dépenses',
+                '/depenses',
+                Colors.red.shade100,
               ),
+
               _CardData(
                 Icons.calendar_today,
                 'Calendrier d’entretien',
-                '/proprietaire/entretien',
+                '/calendrier',
                 Colors.orange.shade200,
               ),
               _CardData(
                 Icons.notifications_active,
                 'Notifications & alertes',
-                '/proprietaire/notifications',
+                '/notifications',
                 Colors.orange.shade100,
               ),
             ]),

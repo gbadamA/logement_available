@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import '../../main.dart';
 import '../../screens/proprietaire/biens_screen.dart';
+import '../../screens/proprietaire/calendrier_entretien_screen.dart';
+import '../../screens/proprietaire/charges_depenses_screen.dart';
 import '../../screens/proprietaire/contrat_details_screen.dart';
 import '../../screens/proprietaire/contrats_baux_screen.dart';
 import '../../screens/proprietaire/disponibiltes_screen.dart';
 import '../../screens/proprietaire/documents_screen.dart';
 import '../../screens/proprietaire/historique_locataires.dart';
 import '../../screens/proprietaire/messagerie_proprietaire_screen.dart';
+import '../../screens/proprietaire/notifications_screen.dart';
 import '../../screens/proprietaire/paiement_proprietaire_screen.dart';
 import '../../screens/proprietaire/photos_documents_screen.dart';
 import '../../screens/proprietaire/revenus_locatifs_screen.dart';
@@ -29,6 +32,9 @@ class ProprietaireRoutes {
     '/documents': (context) => PhotosDocumentsScreen(),
     '/signalement': (context) => SignalementsProprietaireScreen(),
     '/revenus': (context) => RevenusLocatifsScreen(),
+    '/depenses': (context) => ChargesDepensesScreen(),
+    '/calendrier': (context) => CalendrierEntretienScreen(),
+    '/notifications': (context) => NotificationsScreen(),
     '/contrat-details': (context) => ContratDetailsScreen(
       locataire: 'Jean Kouassi',
       logement: 'Appartement B2',

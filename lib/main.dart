@@ -12,7 +12,25 @@ import 'screens/proprietaire/documents_screen.dart';
 import 'screens/proprietaire/statistiques_screen.dart';
 import 'package:gestionbien/themes/app_theme.dart';
 
-void main() => runApp(MyApp());
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  const InitializationSettings initializationSettings = InitializationSettings(
+    android: initializationSettingsAndroid,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

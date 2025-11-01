@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gestionbien/screens/proprietaire/revenus_mensuel_details_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class RevenusLocatifsScreen extends StatelessWidget {
   const RevenusLocatifsScreen({super.key});
@@ -44,6 +45,19 @@ class RevenusLocatifsScreen extends StatelessWidget {
         children: [
           // 🔹 Résumé global
           _buildResume(totalAnnuel),
+
+          const SizedBox(height: 24),
+
+          // 🔹 Graphique en barres
+          Text(
+            "Vue graphique",
+            style: GoogleFonts.manrope(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(height: 300, child: _buildBarChart()),
 
           const SizedBox(height: 24),
 
@@ -91,6 +105,53 @@ class RevenusLocatifsScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBarChart() {
+    return BarChart(
+      BarChartData(
+        alignment: BarChartAlignment.spaceAround,
+        titlesData: FlTitlesData(
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: (value, meta) {
+                final moisIndex = value.toInt();
+                if (moisIndex < revenus.length) {
+                  return Text(
+                    revenus[moisIndex]['mois'].substring(0, 3), // ex: Jan, Fév
+                    style: const TextStyle(fontSize: 12),
+                  );
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ),
+        ),
+        barGroups: revenus.asMap().entries.map((entry) {
+          final index = entry.key;
+          final data = entry.value;
+          return BarChartGroupData(
+            x: index,
+            barRods: [
+              BarChartRodData(
+                toY: (data['encaissé'] as int).toDouble(),
+                color: Colors.green,
+                width: 12,
+              ),
+              BarChartRodData(
+                toY: (data['enAttente'] as int).toDouble(),
+                color: Colors.redAccent,
+                width: 12,
+              ),
+            ],
+          );
+        }).toList(),
       ),
     );
   }

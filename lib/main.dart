@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
 
       routes: AppRoutes.routes,
       onGenerateRoute: AppRoutes.onGenerateRoute,
-      initialRoute: '/home_proprietaire',
+      initialRoute: '/',
     );
   }
 }

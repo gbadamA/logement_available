@@ -5,7 +5,8 @@ class SignupScreen extends StatefulWidget {
   _SignupScreenState createState() => _SignupScreenState();
 }
 
-class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMixin {
+class _SignupScreenState extends State<SignupScreen>
+    with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -25,20 +26,21 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
     );
 
     _slideAnimations = List.generate(4, (i) {
-      return Tween<Offset>(
-        begin: Offset(0, 0.3),
-        end: Offset.zero,
-      ).animate(CurvedAnimation(
-        parent: _formController,
-        curve: Interval(0.2 * i, 0.8, curve: Curves.easeOut),
-      ));
+      return Tween<Offset>(begin: Offset(0, 0.3), end: Offset.zero).animate(
+        CurvedAnimation(
+          parent: _formController,
+          curve: Interval(0.2 * i, 0.8, curve: Curves.easeOut),
+        ),
+      );
     });
 
     _fadeAnimations = List.generate(4, (i) {
-      return Tween<double>(begin: 0, end: 1).animate(CurvedAnimation(
-        parent: _formController,
-        curve: Interval(0.2 * i, 1.0, curve: Curves.easeIn),
-      ));
+      return Tween<double>(begin: 0, end: 1).animate(
+        CurvedAnimation(
+          parent: _formController,
+          curve: Interval(0.2 * i, 1.0, curve: Curves.easeIn),
+        ),
+      );
     });
 
     _formController.forward();
@@ -53,7 +55,9 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
 
       Navigator.pushReplacementNamed(
         context,
-        _selectedRole == 'Propriétaire' ? '/home_proprietaire' : '/home_locataire',
+        _selectedRole == 'Propriétaire'
+            ? '/home_proprietaire'
+            : '/home_locataire',
       );
     }
   }
@@ -78,7 +82,10 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
               Icon(Icons.person_add, size: 80, color: Colors.teal),
               SizedBox(height: 10),
               Center(
-                child: Text('Espace d’inscription', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                child: Text(
+                  'Espace d’inscription',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
               ),
               SizedBox(height: 30),
               SlideTransition(
@@ -88,7 +95,8 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
                   child: TextFormField(
                     controller: _nameController,
                     decoration: InputDecoration(labelText: 'Nom complet'),
-                    validator: (value) => value!.isEmpty ? 'Veuillez entrer votre nom' : null,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Veuillez entrer votre nom' : null,
                   ),
                 ),
               ),
@@ -101,7 +109,8 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
                     controller: _emailController,
                     decoration: InputDecoration(labelText: 'Email'),
                     keyboardType: TextInputType.emailAddress,
-                    validator: (value) => value!.isEmpty ? 'Veuillez entrer un email' : null,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Veuillez entrer un email' : null,
                   ),
                 ),
               ),
@@ -114,7 +123,8 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
                     controller: _passwordController,
                     decoration: InputDecoration(labelText: 'Mot de passe'),
                     obscureText: true,
-                    validator: (value) => value!.length < 6 ? 'Minimum 6 caractères' : null,
+                    validator: (value) =>
+                        value!.length < 6 ? 'Minimum 6 caractères' : null,
                   ),
                 ),
               ),
@@ -151,7 +161,7 @@ class _SignupScreenState extends State<SignupScreen> with TickerProviderStateMix
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/login');
+                  Navigator.pushReplacementNamed(context, '/Home_login');
                 },
                 child: Text('Déjà inscrit ? Se connecter'),
               ),

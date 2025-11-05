@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import '../../utils/app_animations.dart';
 import 'locataire_details_screen.dart';
 
 class HistoriqueLocatairesScreen extends StatelessWidget {
@@ -46,20 +46,40 @@ class HistoriqueLocatairesScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(24),
-        itemCount: historique.length,
-        itemBuilder: (context, index) {
-          final locataire = historique[index];
-          return _buildLocataireCard(
-            context: context, // 👈 on passe le context
-            nom: locataire['nom'],
-            logement: locataire['logement'],
-            dateEntree: locataire['dateEntree'],
-            dateSortie: locataire['dateSortie'],
-            statut: locataire['statut'],
-          );
-        },
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: historique.isEmpty
+            ? Center(
+                key: const ValueKey('empty'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    emptyAnimation(height: 140),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Aucun locataire enregistré pour le moment.',
+                      style: textTheme.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                key: const ValueKey('list'),
+                padding: const EdgeInsets.all(24),
+                itemCount: historique.length,
+                itemBuilder: (context, index) {
+                  final locataire = historique[index];
+                  return _buildLocataireCard(
+                    context: context,
+                    nom: locataire['nom'],
+                    logement: locataire['logement'],
+                    dateEntree: locataire['dateEntree'],
+                    dateSortie: locataire['dateSortie'],
+                    statut: locataire['statut'],
+                  );
+                },
+              ),
       ),
     );
   }
@@ -72,77 +92,73 @@ class HistoriqueLocatairesScreen extends StatelessWidget {
     required String dateSortie,
     required String statut,
   }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Ink(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: _getStatutColor(statut).withOpacity(0.2),
+          child: Icon(Icons.person, color: _getStatutColor(statut)),
         ),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: _getStatutColor(statut).withOpacity(0.2),
-            child: Icon(Icons.person, color: _getStatutColor(statut)),
-          ),
-          title: Text(
-            nom,
-            style: GoogleFonts.manrope(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                logement,
-                style: GoogleFonts.manrope(
-                  fontSize: 13,
-                  color: Colors.grey.shade700,
-                ),
-              ),
-              Text(
-                "Entrée : $dateEntree",
-                style: GoogleFonts.manrope(fontSize: 12),
-              ),
-              Text(
-                "Sortie : $dateSortie",
-                style: GoogleFonts.manrope(fontSize: 12),
-              ),
-            ],
-          ),
-          trailing: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: _getStatutColor(statut).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              statut,
+        title: Text(
+          nom,
+          style: GoogleFonts.manrope(fontSize: 15, fontWeight: FontWeight.w600),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              logement,
               style: GoogleFonts.manrope(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: _getStatutColor(statut),
+                fontSize: 13,
+                color: Colors.grey.shade700,
               ),
             ),
-          ),
-          // 👇 Navigation vers LocataireDetailsScreen
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => LocataireDetailsScreen(
-                  nom: nom,
-                  logement: logement,
-                  dateEntree: dateEntree,
-                  dateSortie: dateSortie,
-                  statut: statut,
-                ),
-              ),
-            );
-          },
+            Text(
+              "Entrée : $dateEntree",
+              style: GoogleFonts.manrope(fontSize: 12),
+            ),
+            Text(
+              "Sortie : $dateSortie",
+              style: GoogleFonts.manrope(fontSize: 12),
+            ),
+          ],
         ),
+        trailing: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          decoration: BoxDecoration(
+            color: _getStatutColor(statut).withOpacity(0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            statut,
+            style: GoogleFonts.manrope(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: _getStatutColor(statut),
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            slideFromRight(
+              LocataireDetailsScreen(
+                nom: nom,
+                logement: logement,
+                dateEntree: dateEntree,
+                dateSortie: dateSortie,
+                statut: statut,
+              ),
+            ),
+          );
+        },
       ),
     );
   }

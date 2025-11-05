@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../utils/app_animations.dart'; // 🎬 Animations Lottie
+
 class CalendrierEntretienScreen extends StatefulWidget {
   const CalendrierEntretienScreen({super.key});
 
@@ -33,6 +35,17 @@ class _CalendrierEntretienScreenState extends State<CalendrierEntretienScreen> {
 
   List<Map<String, String>> _getEventsForDay(DateTime day) {
     return _events[DateTime.utc(day.year, day.month, day.day)] ?? [];
+  }
+
+  Color _getStatutColor(String statut) {
+    switch (statut) {
+      case 'Réalisé':
+        return Colors.green;
+      case 'Reporté':
+        return Colors.blue;
+      default:
+        return Colors.redAccent;
+    }
   }
 
   void _ajouterEntretien(BuildContext context) {
@@ -74,22 +87,32 @@ class _CalendrierEntretienScreenState extends State<CalendrierEntretienScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (_selectedDay != null && _titreController.text.isNotEmpty) {
-                final dateKey = DateTime.utc(
-                  _selectedDay!.year,
-                  _selectedDay!.month,
-                  _selectedDay!.day,
+              if (_selectedDay == null ||
+                  _titreController.text.trim().isEmpty ||
+                  _logementController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Veuillez remplir tous les champs"),
+                  ),
                 );
-                setState(() {
-                  _events.putIfAbsent(dateKey, () => []);
-                  _events[dateKey]!.add({
-                    'titre': _titreController.text,
-                    'logement': _logementController.text,
-                    'statut': statut,
-                  });
-                });
-                Navigator.pop(context);
+                return;
               }
+
+              final dateKey = DateTime.utc(
+                _selectedDay!.year,
+                _selectedDay!.month,
+                _selectedDay!.day,
+              );
+              setState(() {
+                _events.putIfAbsent(dateKey, () => []);
+                _events[dateKey]!.add({
+                  'titre': _titreController.text.trim(),
+                  'logement': _logementController.text.trim(),
+                  'statut': statut,
+                });
+              });
+
+              Navigator.pop(context);
             },
             child: const Text("Ajouter"),
           ),
@@ -100,6 +123,13 @@ class _CalendrierEntretienScreenState extends State<CalendrierEntretienScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final eventsDuJour = _getEventsForDay(_selectedDay ?? _focusedDay);
+    final dateKey = DateTime.utc(
+      (_selectedDay ?? _focusedDay).year,
+      (_selectedDay ?? _focusedDay).month,
+      (_selectedDay ?? _focusedDay).day,
+    );
+
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
@@ -113,7 +143,6 @@ class _CalendrierEntretienScreenState extends State<CalendrierEntretienScreen> {
       ),
       body: Column(
         children: [
-          // 🔹 Calendrier
           TableCalendar(
             firstDay: DateTime.utc(2023, 1, 1),
             lastDay: DateTime.utc(2025, 12, 31),
@@ -127,62 +156,85 @@ class _CalendrierEntretienScreenState extends State<CalendrierEntretienScreen> {
             },
             eventLoader: _getEventsForDay,
             calendarStyle: CalendarStyle(
-              todayDecoration: BoxDecoration(
+              todayDecoration: const BoxDecoration(
                 color: Colors.orange,
                 shape: BoxShape.circle,
               ),
-              selectedDecoration: BoxDecoration(
+              selectedDecoration: const BoxDecoration(
                 color: Colors.green,
                 shape: BoxShape.circle,
               ),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // 🔹 Liste des entretiens du jour sélectionné
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                if (_selectedDay == null)
-                  Text(
-                    "Sélectionnez une date pour voir ou ajouter des entretiens",
-                    style: GoogleFonts.manrope(color: Colors.grey),
-                  ),
-                ..._getEventsForDay(_selectedDay ?? _focusedDay).map((event) {
-                  return Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListTile(
-                      leading: const Icon(Icons.build, color: Colors.orange),
-                      title: Text(
-                        event['titre']!,
-                        style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: Text("Logement : ${event['logement']}"),
-                      trailing: Text(
-                        event['statut']!,
-                        style: GoogleFonts.manrope(
-                          fontWeight: FontWeight.w700,
-                          color: event['statut'] == 'Réalisé'
-                              ? Colors.green
-                              : event['statut'] == 'Reporté'
-                              ? Colors.blue
-                              : Colors.redAccent,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: eventsDuJour.isEmpty
+                  ? Column(
+                      key: const ValueKey('empty'),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        emptyAnimation(height: 140),
+                        const SizedBox(height: 16),
+                        Text(
+                          "Aucun entretien prévu pour cette date.",
+                          style: GoogleFonts.manrope(color: Colors.grey),
+                          textAlign: TextAlign.center,
                         ),
-                      ),
+                      ],
+                    )
+                  : ListView(
+                      key: const ValueKey('list'),
+                      padding: const EdgeInsets.all(16),
+                      children: eventsDuJour.map((event) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ListTile(
+                            leading: const Icon(
+                              Icons.build,
+                              color: Colors.orange,
+                            ),
+                            title: Text(
+                              event['titre']!,
+                              style: GoogleFonts.manrope(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            subtitle: Text("Logement : ${event['logement']}"),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  event['statut']!,
+                                  style: GoogleFonts.manrope(
+                                    fontWeight: FontWeight.w700,
+                                    color: _getStatutColor(event['statut']!),
+                                  ),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.redAccent,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _events[dateKey]?.remove(event);
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
                     ),
-                  );
-                }),
-              ],
             ),
           ),
         ],
       ),
-
-      // 🔹 Bouton d’ajout
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.orange,
         child: const Icon(Icons.add),

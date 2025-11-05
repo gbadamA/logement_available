@@ -32,6 +32,19 @@ class DepensesMensuellesDetailsScreen extends StatelessWidget {
     return statut == 'Payé' ? Colors.green : Colors.redAccent;
   }
 
+  Color _getColorForCategory(String key) {
+    switch (key) {
+      case 'Entretien':
+        return Colors.blue;
+      case 'Impôts fonciers':
+        return Colors.orange;
+      case 'Réparations':
+        return Colors.purple;
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final total = depenses.fold<int>(0, (sum, d) => sum + d['montant'] as int);
@@ -50,41 +63,8 @@ class DepensesMensuellesDetailsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          // 🔹 Résumé du mois
-          Ink(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Text(
-                    "Total dépenses",
-                    style: GoogleFonts.manrope(
-                      fontSize: 14,
-                      color: Colors.grey.shade700,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    "$total CFA",
-                    style: GoogleFonts.manrope(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.redAccent,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
+          _buildResume(total),
           const SizedBox(height: 24),
-
-          // 🔹 Graphique camembert
           Text(
             "Répartition par catégorie",
             style: GoogleFonts.manrope(
@@ -94,10 +74,7 @@ class DepensesMensuellesDetailsScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           SizedBox(height: 250, child: _buildPieChart()),
-
           const SizedBox(height: 24),
-
-          // 🔹 Liste des dépenses
           Text(
             "Détails des charges",
             style: GoogleFonts.manrope(
@@ -112,6 +89,39 @@ class DepensesMensuellesDetailsScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildResume(int total) {
+    return Ink(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text(
+              "Total dépenses",
+              style: GoogleFonts.manrope(
+                fontSize: 14,
+                color: Colors.grey.shade700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "$total CFA",
+              style: GoogleFonts.manrope(
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+                color: Colors.redAccent,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildPieChart() {
     final Map<String, int> categories = {};
     for (var d in depenses) {
@@ -122,6 +132,9 @@ class DepensesMensuellesDetailsScreen extends StatelessWidget {
 
     return PieChart(
       PieChartData(
+        sectionsSpace: 2,
+        centerSpaceRadius: 40,
+        pieTouchData: PieTouchData(enabled: true),
         sections: categories.entries.map((entry) {
           final pourcentage = (entry.value / total) * 100;
           return PieChartSectionData(
@@ -137,19 +150,6 @@ class DepensesMensuellesDetailsScreen extends StatelessWidget {
         }).toList(),
       ),
     );
-  }
-
-  Color _getColorForCategory(String key) {
-    switch (key) {
-      case 'Entretien':
-        return Colors.blue;
-      case 'Impôts fonciers':
-        return Colors.orange;
-      case 'Réparations':
-        return Colors.purple;
-      default:
-        return Colors.grey;
-    }
   }
 
   Widget _buildDepenseCard(Map<String, dynamic> d) {

@@ -7,6 +7,7 @@ import '../../screens/proprietaire/contrat_details_screen.dart';
 import '../../screens/proprietaire/contrats_baux_screen.dart';
 import '../../screens/proprietaire/disponibiltes_screen.dart';
 import '../../screens/proprietaire/documents_screen.dart';
+import '../../screens/proprietaire/fiche_bien_screen.dart';
 import '../../screens/proprietaire/historique_locataires.dart';
 import '../../screens/proprietaire/messagerie_proprietaire_screen.dart';
 import '../../screens/proprietaire/notifications_screen.dart';

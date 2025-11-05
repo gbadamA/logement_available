@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../utils/app_animations.dart';
 import 'contrat_details_screen.dart';
 import 'nouveau_contrat.dart';
 
@@ -60,7 +61,7 @@ class ContratsBauxScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           final c = contrats[index];
           return _buildContratCard(
-            context: context, // 👈 on passe le context ici
+            context: context,
             locataire: c['locataire'],
             logement: c['logement'],
             dateDebut: c['dateDebut'],
@@ -72,10 +73,7 @@ class ContratsBauxScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const NouveauContratScreen()),
-          );
+          Navigator.push(context, slideFromRight(const NouveauContratScreen()));
         },
         icon: const Icon(Icons.add),
         label: const Text("Nouveau contrat"),
@@ -85,7 +83,7 @@ class ContratsBauxScreen extends StatelessWidget {
   }
 
   Widget _buildContratCard({
-    required BuildContext context, // 👈 paramètre ajouté
+    required BuildContext context,
     required String locataire,
     required String logement,
     required String dateDebut,
@@ -97,11 +95,10 @@ class ContratsBauxScreen extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: InkWell(
         onTap: () {
-          // Navigation vers détails du contrat
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (_) => ContratDetailsScreen(
+            slideFromRight(
+              ContratDetailsScreen(
                 locataire: locataire,
                 logement: logement,
                 dateDebut: dateDebut,
@@ -123,7 +120,6 @@ class ContratsBauxScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 👤 Locataire + logement
                 Text(
                   '$locataire - $logement',
                   style: GoogleFonts.manrope(
@@ -132,8 +128,6 @@ class ContratsBauxScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-
-                // 📅 Dates
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -154,8 +148,6 @@ class ContratsBauxScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-
-                // 🟢 Statut + actions
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -185,11 +177,10 @@ class ContratsBauxScreen extends StatelessWidget {
                             color: Colors.indigo,
                           ),
                           onPressed: () {
-                            // Voir détails via le même Navigator.push
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (_) => ContratDetailsScreen(
+                              slideFromRight(
+                                ContratDetailsScreen(
                                   locataire: locataire,
                                   logement: logement,
                                   dateDebut: dateDebut,
@@ -217,7 +208,6 @@ class ContratsBauxScreen extends StatelessWidget {
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
-                                      // 👉 logique de mise à jour (ex: Firebase update)
                                       Navigator.pop(context);
                                       ScaffoldMessenger.of(
                                         context,
@@ -236,7 +226,6 @@ class ContratsBauxScreen extends StatelessWidget {
                             );
                           },
                         ),
-
                         IconButton(
                           icon: const Icon(
                             Icons.cancel,
@@ -257,7 +246,6 @@ class ContratsBauxScreen extends StatelessWidget {
                                   ),
                                   ElevatedButton(
                                     onPressed: () {
-                                      // 👉 logique de mise à jour (ex: Firebase update)
                                       Navigator.pop(context);
                                       ScaffoldMessenger.of(
                                         context,

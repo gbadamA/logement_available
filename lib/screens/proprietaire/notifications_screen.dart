@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../utils/app_animations.dart';
 import '../services/notification_service.dart';
 
 class NotificationsScreen extends StatelessWidget {
@@ -51,49 +52,86 @@ class NotificationsScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16),
-              itemCount: notifications.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                final notif = notifications[index];
-                return Ink(
-                  decoration: BoxDecoration(
-                    color: notif['lu'] ? Colors.white : Colors.orange.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(color: Colors.black12, blurRadius: 4),
-                    ],
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: _getTypeColor(
-                        notif['type'],
-                      ).withOpacity(0.2),
-                      child: Icon(
-                        Icons.notifications,
-                        color: _getTypeColor(notif['type']),
-                      ),
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: notifications.isEmpty
+                  ? Column(
+                      key: const ValueKey('empty'),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        emptyAnimation(height: 140),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Aucune notification pour le moment.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    )
+                  : ListView.separated(
+                      key: const ValueKey('list'),
+                      padding: const EdgeInsets.all(16),
+                      itemCount: notifications.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
+                      itemBuilder: (context, index) {
+                        final notif = notifications[index];
+                        return Ink(
+                          decoration: BoxDecoration(
+                            color: notif['lu']
+                                ? Colors.white
+                                : Colors.orange.shade100.withOpacity(0.6),
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(color: Colors.black12, blurRadius: 4),
+                            ],
+                          ),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              backgroundColor: _getTypeColor(
+                                notif['type'],
+                              ).withOpacity(0.2),
+                              child: Icon(
+                                Icons.notifications,
+                                color: _getTypeColor(notif['type']),
+                              ),
+                            ),
+                            title: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    notif['titre'],
+                                    style: GoogleFonts.manrope(
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                                if (!notif['lu'])
+                                  Container(
+                                    margin: const EdgeInsets.only(left: 6),
+                                    width: 8,
+                                    height: 8,
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.redAccent,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            subtitle: Text(notif['message']),
+                            trailing: Text(
+                              notif['date'],
+                              style: GoogleFonts.manrope(
+                                fontSize: 12,
+                                color: Colors.grey.shade600,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    title: Text(
-                      notif['titre'],
-                      style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
-                    ),
-                    subtitle: Text(notif['message']),
-                    trailing: Text(
-                      notif['date'],
-                      style: GoogleFonts.manrope(
-                        fontSize: 12,
-                        color: Colors.grey.shade600,
-                      ),
-                    ),
-                  ),
-                );
-              },
             ),
           ),
 
-          // 🔹 Bouton de test
           Padding(
             padding: const EdgeInsets.all(16),
             child: ElevatedButton.icon(

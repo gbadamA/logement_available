@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gestionbien/screens/proprietaire/revenus_mensuel_details_screen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:gestionbien/screens/proprietaire/revenus_mensuel_details_screen.dart';
+
+import '../../utils/app_animations.dart'; // 🎬 Animations centralisées
 
 class RevenusLocatifsScreen extends StatelessWidget {
   const RevenusLocatifsScreen({super.key});
@@ -40,71 +42,83 @@ class RevenusLocatifsScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(24),
-        children: [
-          // 🔹 Résumé global
-          _buildResume(totalAnnuel),
-
-          const SizedBox(height: 24),
-
-          // 🔹 Graphique en barres
-          Text(
-            "Vue graphique",
-            style: GoogleFonts.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 12),
-          SizedBox(height: 300, child: _buildBarChart()),
-
-          const SizedBox(height: 24),
-
-          // 🔹 Liste mensuelle
-          Text(
-            "Détails mensuels",
-            style: GoogleFonts.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 12),
-          ...revenus.map((r) => _buildRevenuCard(context, r)).toList(),
-        ],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: revenus.isEmpty
+            ? Center(
+                key: const ValueKey('empty'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    emptyAnimation(height: 140),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Aucun revenu enregistré pour le moment.',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              )
+            : ListView(
+                key: const ValueKey('list'),
+                padding: const EdgeInsets.all(24),
+                children: [
+                  _buildResume(totalAnnuel),
+                  const SizedBox(height: 24),
+                  Text(
+                    "Vue graphique",
+                    style: GoogleFonts.manrope(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(height: 300, child: _buildBarChart()),
+                  const SizedBox(height: 24),
+                  Text(
+                    "Détails mensuels",
+                    style: GoogleFonts.manrope(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ...revenus.map((r) => _buildRevenuCard(context, r)).toList(),
+                ],
+              ),
       ),
     );
   }
 
   Widget _buildResume(int totalAnnuel) {
-    return Ink(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text(
-              "Total encaissé en 2024",
-              style: GoogleFonts.manrope(
-                fontSize: 14,
-                color: Colors.grey.shade700,
-              ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Text(
+            "Total encaissé en 2024",
+            style: GoogleFonts.manrope(
+              fontSize: 14,
+              color: Colors.grey.shade700,
             ),
-            const SizedBox(height: 8),
-            Text(
-              "$totalAnnuel CFA",
-              style: GoogleFonts.manrope(
-                fontSize: 22,
-                fontWeight: FontWeight.w800,
-                color: Colors.green,
-              ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            "$totalAnnuel CFA",
+            style: GoogleFonts.manrope(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: Colors.green,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -124,7 +138,7 @@ class RevenusLocatifsScreen extends StatelessWidget {
                 final moisIndex = value.toInt();
                 if (moisIndex < revenus.length) {
                   return Text(
-                    revenus[moisIndex]['mois'].substring(0, 3), // ex: Jan, Fév
+                    revenus[moisIndex]['mois'].substring(0, 3),
                     style: const TextStyle(fontSize: 12),
                   );
                 }
@@ -157,52 +171,49 @@ class RevenusLocatifsScreen extends StatelessWidget {
   }
 
   Widget _buildRevenuCard(BuildContext context, Map<String, dynamic> r) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Ink(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 6)],
+      ),
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Colors.orange.shade100,
+          child: const Icon(Icons.calendar_month, color: Colors.orange),
         ),
-        child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colors.orange.shade100,
-            child: const Icon(Icons.calendar_month, color: Colors.orange),
-          ),
-          title: Text(
-            r['mois'],
-            style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
-          ),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Total : ${r['total']} CFA"),
+        title: Text(
+          r['mois'],
+          style: GoogleFonts.manrope(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("Total : ${r['total']} CFA"),
+            Text(
+              "Encaissé : ${r['encaissé']} CFA",
+              style: const TextStyle(color: Colors.green),
+            ),
+            if (r['enAttente'] > 0)
               Text(
-                "Encaissé : ${r['encaissé']} CFA",
-                style: const TextStyle(color: Colors.green),
+                "En attente : ${r['enAttente']} CFA",
+                style: const TextStyle(color: Colors.redAccent),
               ),
-              if (r['enAttente'] > 0)
-                Text(
-                  "En attente : ${r['enAttente']} CFA",
-                  style: const TextStyle(color: Colors.redAccent),
-                ),
-            ],
-          ),
-          trailing: const Icon(
-            Icons.arrow_forward_ios,
-            size: 16,
-            color: Colors.grey,
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => RevenusMensuelsDetailsScreen(mois: r['mois']),
-              ),
-            );
-          },
+          ],
         ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+          color: Colors.grey,
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            slideFromRight(RevenusMensuelsDetailsScreen(mois: r['mois'])),
+          );
+        },
       ),
     );
   }

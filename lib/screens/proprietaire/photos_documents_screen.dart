@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:open_file/open_file.dart';
 
 class PhotosDocumentsScreen extends StatefulWidget {
   const PhotosDocumentsScreen({super.key});
@@ -15,8 +16,14 @@ class _PhotosDocumentsScreenState extends State<PhotosDocumentsScreen> {
       'type': 'image',
       'nom': 'Appartement_B2_photo1.jpg',
       'logement': 'Appartement B2',
+      'path': null,
     },
-    {'type': 'pdf', 'nom': 'Contrat_B2.pdf', 'logement': 'Appartement B2'},
+    {
+      'type': 'pdf',
+      'nom': 'Contrat_B2.pdf',
+      'logement': 'Appartement B2',
+      'path': null,
+    },
   ];
 
   IconData _getIcon(String type) {
@@ -54,13 +61,37 @@ class _PhotosDocumentsScreenState extends State<PhotosDocumentsScreen> {
         fichiers.add({
           'type': fichier.extension == 'pdf' ? 'pdf' : 'image',
           'nom': fichier.name,
-          'logement': 'Non assigné', // 👉 tu pourras l’associer à un logement
+          'path': fichier.path,
+          'logement': 'Non assigné',
         });
       });
 
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("${fichier.name} ajouté ✅")));
+    }
+  }
+
+  Future<void> _assignerLogement(int index) async {
+    final selection = await showDialog<String>(
+      context: context,
+      builder: (_) => SimpleDialog(
+        title: const Text("Assigner à un logement"),
+        children: [
+          SimpleDialogOption(
+            child: const Text("Appartement B1"),
+            onPressed: () => Navigator.pop(context, "Appartement B1"),
+          ),
+          SimpleDialogOption(
+            child: const Text("Appartement B2"),
+            onPressed: () => Navigator.pop(context, "Appartement B2"),
+          ),
+        ],
+      ),
+    );
+
+    if (selection != null) {
+      setState(() => fichiers[index]['logement'] = selection);
     }
   }
 
@@ -76,18 +107,21 @@ class _PhotosDocumentsScreenState extends State<PhotosDocumentsScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(24),
-        itemCount: fichiers.length,
-        itemBuilder: (context, index) {
-          final fichier = fichiers[index];
-          return _buildFileCard(
-            fichier['type'],
-            fichier['nom'],
-            fichier['logement'],
-          );
-        },
-      ),
+      body: fichiers.isEmpty
+          ? Center(
+              child: Text(
+                "Aucun fichier pour le moment 📂",
+                style: GoogleFonts.manrope(fontSize: 16),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(24),
+              itemCount: fichiers.length,
+              itemBuilder: (context, index) {
+                final fichier = fichiers[index];
+                return _buildFileCard(fichier, index);
+              },
+            ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _ajouterFichier,
         icon: const Icon(Icons.add),
@@ -97,7 +131,12 @@ class _PhotosDocumentsScreenState extends State<PhotosDocumentsScreen> {
     );
   }
 
-  Widget _buildFileCard(String type, String nom, String logement) {
+  Widget _buildFileCard(Map<String, dynamic> fichier, int index) {
+    final type = fichier['type'];
+    final nom = fichier['nom'];
+    final logement = fichier['logement'];
+    final path = fichier['path'];
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Ink(
@@ -126,17 +165,30 @@ class _PhotosDocumentsScreenState extends State<PhotosDocumentsScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                icon: const Icon(Icons.visibility, color: Colors.indigo),
-                onPressed: () {},
+                icon: Icon(
+                  Icons.visibility,
+                  color: path != null ? Colors.indigo : Colors.grey,
+                ),
+                onPressed: path != null
+                    ? () => OpenFile.open(path)
+                    : () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Fichier non disponible pour la prévisualisation ❌",
+                            ),
+                          ),
+                        );
+                      },
               ),
               IconButton(
-                icon: const Icon(Icons.download, color: Colors.green),
-                onPressed: () {},
+                icon: const Icon(Icons.edit, color: Colors.deepOrange),
+                onPressed: () => _assignerLogement(index),
               ),
               IconButton(
                 icon: const Icon(Icons.delete, color: Colors.redAccent),
                 onPressed: () {
-                  setState(() => fichiers.removeWhere((f) => f['nom'] == nom));
+                  setState(() => fichiers.removeAt(index));
                   ScaffoldMessenger.of(
                     context,
                   ).showSnackBar(SnackBar(content: Text("$nom supprimé ❌")));

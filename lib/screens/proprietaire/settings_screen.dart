@@ -31,11 +31,12 @@ class SettingsProprietaireScreen extends StatelessWidget {
                 Icons.lock,
                 'Changer mot de passe',
                 () {
-                  // À connecter à ton écran de sécurité
+                  Navigator.pushNamed(context, '/changer-mdp');
                 },
               ),
+
               _buildSettingButton(context, Icons.language, 'Langue', () {
-                // À connecter à ton sélecteur de langue
+                Navigator.pushNamed(context, '/langue');
               }),
               _buildSettingButton(context, Icons.logout, 'Déconnexion', () {
                 Navigator.pushReplacementNamed(context, '/');

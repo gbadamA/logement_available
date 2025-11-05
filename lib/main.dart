@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:gestionbien/screens/proprietaire/settings_screen.dart';
-import 'package:lottie/lottie.dart';
-import 'config/app_routes.dart';
-import 'core/widgets/custom_drawer.dart';
-import 'screens/proprietaire/dashboard_screen.dart';
-import 'screens/proprietaire/biens_screen.dart';
-import 'screens/proprietaire/paiement_proprietaire_screen.dart';
-import 'screens/proprietaire/signalements_proprietaire_screen.dart';
-import 'screens/proprietaire/messagerie_proprietaire_screen.dart';
-import 'screens/proprietaire/documents_screen.dart';
-import 'screens/proprietaire/statistiques_screen.dart';
-import 'package:gestionbien/themes/app_theme.dart';
-
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:gestionbien/config/app_routes.dart';
+import 'package:gestionbien/themes/app_theme.dart';
+import 'package:gestionbien/screens/proprietaire/settings_screen.dart';
+import 'package:gestionbien/screens/proprietaire/dashboard_screen.dart';
+import 'package:gestionbien/screens/proprietaire/biens_screen.dart';
+import 'package:gestionbien/screens/proprietaire/paiement_proprietaire_screen.dart';
+import 'package:gestionbien/screens/proprietaire/signalements_proprietaire_screen.dart';
+import 'package:gestionbien/screens/proprietaire/messagerie_proprietaire_screen.dart';
+import 'package:gestionbien/screens/proprietaire/documents_screen.dart';
+import 'package:gestionbien/screens/proprietaire/statistiques_screen.dart';
+import 'package:gestionbien/core/widgets/custom_drawer.dart';
+import 'package:lottie/lottie.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -32,24 +32,51 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.setLocale(newLocale);
+  }
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale _locale = const Locale('fr');
+
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'ImmoConnect',
+      title: 'Gestion Immobilière',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.light, // auto switch
-      initialRoute: '/',
+      themeMode: ThemeMode.light,
+      locale: _locale,
+      supportedLocales: const [Locale('fr'), Locale('en'), Locale('es')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+
       routes: AppRoutes.routes,
+      onGenerateRoute: AppRoutes.onGenerateRoute,
+      initialRoute: '/home_proprietaire',
     );
   }
 }
 
 class HomePage extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
@@ -58,21 +85,21 @@ class _HomePageState extends State<HomePage> {
   Widget _getBody() {
     switch (_selectedPage) {
       case 'Mes biens':
-        return MesBiensScreen();
+        return const MesBiensScreen();
       case 'Paiements':
-        return PaiementProprietaireScreen();
+        return const PaiementProprietaireScreen();
       case 'Signalements':
-        return SignalementsProprietaireScreen();
+        return const SignalementsProprietaireScreen();
       case 'Messagerie':
-        return MessagerieProprietaireScreen();
+        return const MessagerieProprietaireScreen();
       case 'Documents':
-        return DocumentsScreen();
+        return const DocumentsScreen();
       case 'Statistiques':
-        return StatistiquesScreen();
+        return const StatistiquesScreen();
       case 'Paramètres':
-        return SettingsProprietaireScreen();
+        return const SettingsProprietaireScreen();
       default:
-        return ProprietaireDashboardScreen();
+        return const ProprietaireDashboardScreen();
     }
   }
 
@@ -88,32 +115,24 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(title: Text(_selectedPage)),
       drawer: CustomDrawer(
-        role: 'Propriétaire', // ou 'Locataire'
+        role: 'Propriétaire',
         selectedPage: _selectedPage,
-        onSelect: (title) {
-          setState(() {
-            _selectedPage = title;
-            Navigator.pop(context);
-          });
-        },
+        onSelect: _selectPage,
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Colors.green),
+              decoration: const BoxDecoration(color: Colors.green),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Lottie.asset(
-                    'assets/owner_avatar.json',
-                    height: 60,
-                  ), // fichier Lottie local
-                  SizedBox(height: 10),
-                  Text(
+                  Lottie.asset('assets/owner_avatar.json', height: 60),
+                  const SizedBox(height: 10),
+                  const Text(
                     'Bienvenue Propriétaire',
                     style: TextStyle(color: Colors.black87, fontSize: 18),
                   ),
-                  Text(
+                  const Text(
                     'contact@immoconnect.ci',
                     style: TextStyle(color: Colors.black87, fontSize: 14),
                   ),
@@ -121,38 +140,38 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.dashboard),
-              title: Text('Tableau de bord'),
+              leading: const Icon(Icons.dashboard),
+              title: const Text('Tableau de bord'),
               onTap: () => _selectPage('Tableau de bord'),
             ),
             ListTile(
-              leading: Icon(Icons.home_work),
-              title: Text('Mes biens'),
+              leading: const Icon(Icons.home_work),
+              title: const Text('Mes biens'),
               onTap: () => _selectPage('Mes biens'),
             ),
             ListTile(
-              leading: Icon(Icons.payment),
-              title: Text('Paiements'),
+              leading: const Icon(Icons.payment),
+              title: const Text('Paiements'),
               onTap: () => _selectPage('Paiements'),
             ),
             ListTile(
-              leading: Icon(Icons.report_problem),
-              title: Text('Signalements'),
+              leading: const Icon(Icons.report_problem),
+              title: const Text('Signalements'),
               onTap: () => _selectPage('Signalements'),
             ),
             ListTile(
-              leading: Icon(Icons.chat),
-              title: Text('Messagerie'),
+              leading: const Icon(Icons.chat),
+              title: const Text('Messagerie'),
               onTap: () => _selectPage('Messagerie'),
             ),
             ListTile(
-              leading: Icon(Icons.folder),
-              title: Text('Documents'),
+              leading: const Icon(Icons.folder),
+              title: const Text('Documents'),
               onTap: () => _selectPage('Documents'),
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Statistiques'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Statistiques'),
               onTap: () => _selectPage('Statistiques'),
             ),
           ],

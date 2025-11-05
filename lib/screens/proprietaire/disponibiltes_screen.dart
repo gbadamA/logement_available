@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../utils/app_animations.dart'; // 🎬 Animations Lottie
+
 class DisponibilitesScreen extends StatefulWidget {
   const DisponibilitesScreen({super.key});
 
@@ -56,11 +58,7 @@ class _DisponibilitesScreenState extends State<DisponibilitesScreen> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    final logementsDisponibles = tousLesLogements
-        .where((l) => l.statut == 'Disponible')
-        .toList();
 
-    // 🔍 Filtrage dynamique
     final logementsFiltres = tousLesLogements.where((logement) {
       final matchStatut =
           statutFiltre == 'Tous' || logement.statut == statutFiltre;
@@ -88,7 +86,6 @@ class _DisponibilitesScreenState extends State<DisponibilitesScreen> {
               Text('Filtrer les logements', style: textTheme.headlineMedium),
               const SizedBox(height: 16),
 
-              // 🎛️ Filtres déroulants
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -96,37 +93,51 @@ class _DisponibilitesScreenState extends State<DisponibilitesScreen> {
                     'Statut',
                     ['Tous', 'Disponible', 'Occupé', 'En attente'],
                     statutFiltre,
-                    (val) {
-                      setState(() => statutFiltre = val);
-                    },
+                    (val) => setState(() => statutFiltre = val),
                   ),
                   const SizedBox(width: 12),
                   _buildDropdown(
                     'Localisation',
                     ['Toutes', 'Abidjan', 'Bingerville'],
                     localisationFiltre,
-                    (val) {
-                      setState(() => localisationFiltre = val);
-                    },
+                    (val) => setState(() => localisationFiltre = val),
                   ),
                   const SizedBox(width: 12),
                   _buildDropdown(
                     'Type',
                     ['Tous', 'Appartement', 'Studio', 'Villa'],
                     typeFiltre,
-                    (val) {
-                      setState(() => typeFiltre = val);
-                    },
+                    (val) => setState(() => typeFiltre = val),
                   ),
                 ],
               ),
 
               const SizedBox(height: 32),
 
-              // 🧩 Cartes filtrées
-              ...logementsFiltres
-                  .map((item) => _buildDisponibiliteCard(context, item))
-                  .toList(),
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 300),
+                child: logementsFiltres.isEmpty
+                    ? Column(
+                        key: const ValueKey('empty'),
+                        children: [
+                          emptyAnimation(height: 140),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Aucun logement ne correspond aux filtres sélectionnés.',
+                            style: textTheme.bodyLarge,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      )
+                    : Column(
+                        key: const ValueKey('list'),
+                        children: logementsFiltres
+                            .map(
+                              (item) => _buildDisponibiliteCard(context, item),
+                            )
+                            .toList(),
+                      ),
+              ),
             ],
           ),
         ),
@@ -134,7 +145,6 @@ class _DisponibilitesScreenState extends State<DisponibilitesScreen> {
     );
   }
 
-  // 🎛️ Widget dropdown réutilisable
   Widget _buildDropdown(
     String label,
     List<String> options,
@@ -156,7 +166,6 @@ class _DisponibilitesScreenState extends State<DisponibilitesScreen> {
     );
   }
 
-  // 🧩 Carte stylée
   Widget _buildDisponibiliteCard(BuildContext context, DisponibiliteData data) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),

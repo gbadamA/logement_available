@@ -4,7 +4,6 @@ import 'package:google_fonts/google_fonts.dart';
 class MesBiensScreen extends StatelessWidget {
   const MesBiensScreen({super.key});
 
-  // 📋 Liste simulée des biens du propriétaire
   final List<Map<String, dynamic>> biens = const [
     {
       'nom': 'Résidence Cocody Riviera',
@@ -43,11 +42,15 @@ class MesBiensScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text(''),
-        backgroundColor: Colors.white,
+        title: Text(
+          'Mes Biens',
+          style: GoogleFonts.manrope(fontWeight: FontWeight.w700),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 1,
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -65,7 +68,6 @@ class MesBiensScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 🏠 Nom du bien
                   Text(
                     bien['nom'],
                     style: GoogleFonts.manrope(
@@ -74,25 +76,17 @@ class MesBiensScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
-
-                  // 📍 Type et adresse
                   Text(
                     '${bien['type']} • ${bien['adresse']}',
                     style: GoogleFonts.manrope(fontSize: 14),
                   ),
-
                   const SizedBox(height: 8),
-
-                  // 👤 Locataire (si occupé)
                   if (bien['locataire'] != null)
                     Text(
                       'Locataire : ${bien['locataire']}',
                       style: GoogleFonts.manrope(fontSize: 14),
                     ),
-
                   const SizedBox(height: 12),
-
-                  // 🔘 Statut + bouton Gérer
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -118,7 +112,11 @@ class MesBiensScreen extends StatelessWidget {
                       ),
                       TextButton.icon(
                         onPressed: () {
-                          // 🔁 Naviguer vers la fiche du bien
+                          Navigator.pushNamed(
+                            context,
+                            '/fiche-bien',
+                            arguments: bien,
+                          );
                         },
                         icon: const Icon(Icons.settings),
                         label: const Text('Gérer'),
@@ -131,11 +129,9 @@ class MesBiensScreen extends StatelessWidget {
           );
         },
       ),
-
-      // ➕ Bouton flottant pour ajouter un bien
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // 🔁 Naviguer vers l’écran d’ajout
+          Navigator.pushNamed(context, '/ajouter-bien');
         },
         icon: const Icon(Icons.add),
         label: const Text('Ajouter un bien'),
